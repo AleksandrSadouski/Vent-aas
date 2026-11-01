@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Enums\Emotion;
+use Illuminate\Validation\Rule;
 
 class VentRequest extends FormRequest
 {
@@ -14,7 +15,7 @@ class VentRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['message' => 'required|string|min:1|max:350',
-        'emotion' => 'required|string|in:joy,sadness,anger,anxiety,reflection'];
+        return ['message' => ['required', 'string', 'max:350'],
+        'emotion' => ['required', Rule::enum(Emotion::class)],];
     }
 }

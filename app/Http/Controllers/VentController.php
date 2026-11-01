@@ -4,16 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\VentRequest;
-use App\Http\Resource\VentResource;
+use App\Http\Resources\VentResource;
 use App\Models\Vent;
 
 class VentController extends Controller
 {
     public function show(Request $request)
     {
-        $vent = Vent::inRandomOrder()->firstOrFail();
+        $vent = Vent::inRandomOrder()->first();
+
+        if(!$vent)
+            {
+                return response()->json(['message' => 'No vents yet'], 404);
+            }
+
         return response()->json(['message' => 'Vent shown',
-        'data' => VentResource($vent)]);
+        'data' => new VentResource($vent)], 200);
     }
 
     public function store(VentRequest $request)
@@ -23,6 +29,6 @@ class VentController extends Controller
         $vent = Vent::create(['message' => $message, 'emotion' => $emotion]);
 
         return response()->json(['message' => 'The vent has been sent',
-        'data' => VentResource($vent)]);
+        'data' => new VentResource($vent)], 201);
     }
 }

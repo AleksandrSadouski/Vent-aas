@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum Emotion
+enum Emotion: string
 {
     case Joy = 'joy';
     case Sadness = 'sadness';

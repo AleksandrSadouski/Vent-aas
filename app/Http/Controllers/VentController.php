@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\VentRequest;
 use App\Models\Vent;
 
 class VentController extends Controller
@@ -13,7 +14,7 @@ class VentController extends Controller
         return $vent;
     }
 
-    public function store(Request $request)
+    public function store(VentRequest $request)
     {
         $message = $request->input('message');
         $emotion = $request->input('emotion');

@@ -15,8 +15,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->shouldRenderJsonWhen(
-            fn (Request $request) => $request->is('api/*') || $request->expectsJson(),
-        );
-    })->create();
+    ->withExceptions(function (Exceptions $exceptions) {
+    $exceptions->render(function (Throwable $e, Request $request) {
+        if ($request->is('api/*')) {
+            $status = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : ($e->getCode() ?: 500);
+            
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], $status);
+        }
+    });
+})->create();
